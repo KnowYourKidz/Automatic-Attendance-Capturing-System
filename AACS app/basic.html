@@ -1,0 +1,115 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Know Your Kidz</title>
+	<style type="text/css">
+		body {
+			font-family: Helvetica, sans-serif;
+		}
+
+		h2,
+		h3 {
+			margin-top: 0;
+		}
+
+		form {
+			margin-top: 15px;
+		}
+
+		form>input {
+			margin-right: 15px;
+		}
+
+		#results0,
+		#results1,
+		#results2,
+		#results3,
+		#results4 {
+			display: inline-block;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="results0">Your captured image will appear here...</div>
+	<div id="results1">Your captured image will appear here...</div>
+	<div id="results2">Your captured image will appear here...</div>
+	<div id="results3">Your captured image will appear here...</div>
+	<div id="results4">Your captured image will appear here...</div>
+
+
+	<h1>Know Your Kidz</h1>
+	<h3>Demonstrates simple 320x240 capture &amp; display upto 5 images</h3>
+
+	<div hidden id="my_camera"></div>
+
+	<!-- First, include the Webcam.js JavaScript Library -->
+	<script type="text/javascript" src="../webcam.min.js"></script>
+
+	<!-- Configure a few settings and attach camera -->
+	<script language="JavaScript">
+		Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
+		Webcam.attach('#my_camera');
+
+	</script>
+
+	<!-- A button for taking snaps -->
+	<form>
+		<input type=button value="Start Capturing" onClick="startCapturing()">
+		<input type=button value="Stop Capturing" onClick="stopCapturing()">
+
+
+
+	</form>
+
+	<!-- Code to handle taking the snapshot and displaying it locally -->
+	<script language="JavaScript">
+		let intervalId;
+
+		function startCapturing() {
+
+			let counter = 0;
+			intervalId = setInterval(function () {
+
+				if (counter < 5) {
+					this.take_snapshot(counter);
+					counter++;
+				}else{
+					this.stopCapturing();
+				} 
+			}, 5000)
+
+
+
+
+		}
+
+		function stopCapturing() {
+			clearInterval(intervalId);
+		}
+
+
+		function take_snapshot(index) {
+			console.log("take_snapshot")
+			// take snapshot and get image data
+			Webcam.snap(function (data_uri) {
+				// display results in page
+
+				document.getElementById('results' + index).innerHTML =
+					'<h2>Here is your image:</h2>' +
+					'<img src="' + data_uri + '"/>';
+			});
+		}
+	</script>
+
+</body>
+
+</html>
